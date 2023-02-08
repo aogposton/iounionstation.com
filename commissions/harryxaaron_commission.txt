@@ -1,0 +1,221 @@
+\\\\\\\\ Alert Message  /////////
+{"text": 
+"[{{exchange}}]///[{{ticker}}]///[{{close}}]///[{{volume}}]///{{strategy.order.alert_message}}///[{{strategy.order.price}}]"
+}
+
+\\\\\\\\ URL & Params  /////////
+/api/commission/cryptotradingbot/automatic?trade_percent=97.5&api_key=vaE3ZLAPDWSoD19GSo&api_secret=wiQ52Ua0oIYDxqtzOoYqqztY9Zv2cnSEp0TK&leverage=10
+Params:
+trade_percent
+api_key
+api_secret
+leverage
+
+
+\\\\\\\\ Pinescript code /////////
+
+
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © Vexxxie01
+
+//@version=5
+leverage  = 10
+strategy("Real One", overlay=true, initial_capital = 10000, default_qty_type = strategy.percent_of_equity, default_qty_value = 100*leverage)
+
+
+[supertrend, direction] = ta.supertrend(3, 10) // supertrend with default values
+
+ema1_200 = request.security(syminfo.tickerid, '1', ta.ema(close,200))
+ema4_200 = request.security(syminfo.tickerid, '4', ta.ema(close,200))
+
+
+
+f_wavetrend(src, chlen, avg, malen) =>
+    tfsrc = request.security(syminfo.tickerid, '1', src)
+    esa = ta.ema(tfsrc, chlen)
+    de = ta.ema(math.abs(tfsrc - esa), chlen)
+    ci = (tfsrc - esa) / (0.015 * de)
+    wt1 = request.security(syminfo.tickerid, '1', ta.ema(ci, avg))
+    wt2 = request.security(syminfo.tickerid, '1', ta.sma(wt1, malen))
+    [wt1, wt2]
+
+[wt1, wt2] = f_wavetrend(hlc3, 9, 12, 3)
+
+
+
+
+// ---- end wavetrend ----
+
+// ---- start QQE MOD ----
+RSI_Period = input(6, title='RSI Length')
+SF = input(5, title='RSI Smoothing')
+QQE = input(3, title='Fast QQE Factor')
+
+src = input(close, title="RSI Source")
+Wilders_Period = RSI_Period * 2 - 1
+Rsi = ta.rsi(src, RSI_Period)
+RsiMa = ta.ema(Rsi, SF)
+AtrRsi = math.abs(RsiMa[1] - RsiMa)
+MaAtrRsi = ta.ema(AtrRsi, Wilders_Period)
+dar = ta.ema(MaAtrRsi, Wilders_Period) * QQE
+
+longband = 0.0
+shortband = 0.0
+trend = 0
+
+DeltaFastAtrRsi = dar
+RSIndex = RsiMa
+newshortband = RSIndex + DeltaFastAtrRsi
+newlongband = RSIndex - DeltaFastAtrRsi
+longband := RSIndex[1] > longband[1] and RSIndex > longband[1] ? 
+   math.max(longband[1], newlongband) : newlongband
+shortband := RSIndex[1] < shortband[1] and RSIndex < shortband[1] ? 
+   math.min(shortband[1], newshortband) : newshortband
+cross_1 = ta.cross(longband[1], RSIndex)
+trend := ta.cross(RSIndex, shortband[1]) ? 1 : cross_1 ? -1 : nz(trend[1], 1)
+FastAtrRsiTL = trend == 1 ? longband : shortband
+length = input(50,  title="Bollinger Length")
+mult = input(0.35, title="BB Multiplier")
+basis = ta.sma(FastAtrRsiTL - 50, length)
+dev = mult * ta.stdev(FastAtrRsiTL - 50, length)
+upper = basis + dev
+lower = basis - dev
+RSI_Period2 = input(6, title='RSI Length')
+SF2 = input(5, title='RSI Smoothing')
+ThreshHold2 = input(3, title="Thresh-hold")
+src2 = input(close, title="RSI Source")
+Rsi2 = ta.rsi(src2, RSI_Period2)
+RsiMa2 = ta.ema(Rsi2, SF2)
+
+Greenbar1 = RsiMa2 - 50 > ThreshHold2
+Greenbar2 = RsiMa - 50 > upper
+
+Redbar1 = RsiMa2 - 50 < 0 - ThreshHold2
+Redbar2 = RsiMa - 50 < lower
+
+color_bar = RsiMa - 50 > upper ? #00c3ff : RsiMa - 50 < lower ? #ff0062 : color.gray
+
+hcolor2 = RsiMa2 - 50 > ThreshHold2 ? color.silver :
+   RsiMa2 - 50 < 0 - ThreshHold2 ? color.silver : na
+
+qqeDown = Redbar1 and Redbar2 == 1 or RsiMa2 - 50 < 0 - ThreshHold2
+qqeUp = Greenbar1 and Greenbar2 == 1 or RsiMa2 - 50 > ThreshHold2
+
+
+
+superTrendLongSignal =  direction[1] > 0 and direction < 0 
+superTrendShortSignal = direction[1] < 0 and direction > 0 
+
+largerOfTheTwo = 0.0
+smallerOfTheTwo = 0.0
+
+if((close>supertrend and superTrendLongSignal) or (close<supertrend and superTrendShortSignal))
+    largerOfTheTwo := close
+    smallerOfTheTwo := supertrend
+else if(close<supertrend and superTrendLongSignal or (close>supertrend and superTrendShortSignal))
+    largerOfTheTwo := supertrend
+    smallerOfTheTwo := close
+    
+stopLossPercentDiff = math.abs((smallerOfTheTwo-largerOfTheTwo)/largerOfTheTwo)*1000
+
+valid = stopLossPercentDiff <= 50
+plot(stopLossPercentDiff,'stopLossPercentDiff')
+
+// plot(s)
+last2barsUp = qqeUp[2] and qqeUp[1] 
+last2barsDown = qqeDown[2] and qqeDown[1]
+
+var upMoment = false
+var upFlag1 = false
+var upFlag2 = false
+
+var downMoment = true
+var downFlag1 = false
+var downFlag2 = false
+
+if(qqeDown and downFlag1 and downFlag2)
+    upMoment := false
+    downMoment := true
+    upFlag1 :=false
+    upFlag2 :=false
+    downFlag2 :=false
+    downFlag1 :=false
+    
+if(qqeUp and upFlag1 and upFlag2)
+    upMoment := true
+    upFlag1 :=false
+    upFlag2 :=false
+    downFlag2 :=false
+    downFlag1 :=false
+    downMoment := false
+
+if downMoment and upFlag1 and qqeUp
+    upFlag2 :=true  
+if downMoment and qqeUp
+    upFlag1 :=true
+if(upMoment and downFlag1 and qqeDown)
+    downFlag2 := true
+if(upMoment and qqeDown)
+    downFlag1 := true
+
+qqeShortSiganl =  (upMoment or qqeUp)
+qqeLongSignal =  (downMoment or qqeDown)
+
+wtShortSignal = wt1 > 0 or wt2 > 0 
+wtLongSignal = wt1 < 0 or wt2 < 0
+
+emaLongSignal = close > ema1_200 or close > ema4_200 
+emaShortSignal = close < ema1_200 or close < ema4_200
+
+longCondition = superTrendLongSignal and emaLongSignal and wtLongSignal and qqeLongSignal and ( valid)
+shortCondition = superTrendShortSignal and emaShortSignal and wtShortSignal and qqeShortSiganl and (valid)
+
+var stopLoss = 0.0
+var limitPrice = 0.0
+exitCondition = (superTrendLongSignal or superTrendShortSignal)
+
+
+
+if (superTrendLongSignal) and (longCondition or shortCondition)
+    stopLoss := supertrend
+    limitPrice := na
+
+
+if (superTrendShortSignal) and (longCondition or shortCondition)
+    limitPrice := supertrend
+    stopLoss := na
+
+
+plot(stopLoss,'stoploss', color=color.green)
+plot(limitPrice,'limit', color=color.red)
+
+if longCondition 
+    strategy.entry("Long Entry", strategy.long)
+    strategy.exit('exit-long',from_entry="Long Entry",stop=stopLoss)
+    alert('exit-long',alert.freq_once_per_bar)
+
+if shortCondition
+    strategy.entry("Short Entry", strategy.short)
+    alert('exit-short',alert.freq_once_per_bar)
+    strategy.exit('exit-short',from_entry="Short Entry",stop=limitPrice)
+
+
+plotshape(strategy.opentrades and exitCondition)
+
+if (strategy.opentrades and exitCondition)
+    strategy.exit('exit-short',from_entry="Short Entry",stop=close)
+    strategy.exit('exit-long',from_entry="Long Entry",stop=close)
+    alert('exit-long',alert.freq_once_per_bar)
+    alert('exit-short',alert.freq_once_per_bar)
+
+
+// prevent long entry and exit on the same candle due to short exit
+if (strategy.opentrades and exitCondition and longCondition)
+    strategy.cancel('exit-long')
+    alert('exit-long',alert.freq_once_per_bar)
+
+// prevent short entry and exit on the same candle due to long exit
+if (strategy.opentrades and exitCondition and shortCondition)
+    strategy.cancel('cancel-exit-short')
+    alert('cancel-exit-short',alert.freq_once_per_bar)
+
