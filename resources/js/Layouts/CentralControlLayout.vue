@@ -1,8 +1,7 @@
 <script setup>
 import navBar from "../components/navBar.vue";
-import sidebar from "../components/sidebar.vue";
 import { computed } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import { usePage, Link } from "@inertiajs/vue3";
 
 const user = computed(() => usePage().props.auth.user);
 const can = computed(() => usePage().props.auth.can);
@@ -13,7 +12,7 @@ const can = computed(() => usePage().props.auth.can);
         style="border-bottom: 1px solid #e2e2e8"
     >
         <div class="container-fluid">
-            <a class="navbar-brand" href="/threads">Tomato</a>
+            <a class="navbar-brand" href="/threads">IO Union Station</a>
             <button
                 class="navbar-toggler"
                 type="button"
@@ -54,7 +53,13 @@ const can = computed(() => usePage().props.auth.can);
                                     >See Statistics</a
                                 >
                             </li>
-
+                            <li>
+                                <a
+                                    class="dropdown-item"
+                                    href="/conductor/account"
+                                    >My account</a
+                                >
+                            </li>
                             <li>
                                 <a class="dropdown-item" href="/logout"
                                     >Log out</a
@@ -74,7 +79,18 @@ const can = computed(() => usePage().props.auth.can);
         "
     >
         <div class="row">
-            <sidebar class="col-2"></sidebar>
+            <div class="col-2">
+                <div class="d-flex flex-column align-items-center" id="sidebar">
+                    <Link class="sidebar-link" href="/threads">Threads</Link>
+                    <Link
+                        class="sidebar-link"
+                        v-if="can['add_threads']"
+                        href="/threads/query"
+                        >Add Thread</Link
+                    >
+                    <span class="sidebar-link-disabled" v-else>Add Thread</span>
+                </div>
+            </div>
             <div class="col-10 p-0">
                 <div>
                     <slot />
@@ -86,5 +102,41 @@ const can = computed(() => usePage().props.auth.can);
 <style>
 .collapse {
     visibility: visible;
+}
+#sidebar {
+    height: 100vh;
+}
+.sidebar-link {
+    border: 1px solid #e2e2e8;
+    border-radius: 10px;
+    background-color: white;
+    color: black;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    height: 40px;
+    margin: 5px;
+    vertical-align: middle;
+    line-height: 40px;
+}
+.sidebar-link-disabled {
+    border: 1px solid #b7b7c6;
+    border-radius: 10px;
+    background-color: #b7b7c6;
+    color: black;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    height: 40px;
+    margin: 5px;
+    vertical-align: middle;
+    line-height: 40px;
+}
+.sidebar-link:hover {
+    background-color: #e2e2e8;
+}
+.sidebar-link-disabled:hover {
+    background-color: #b7b7c6;
+    cursor: not-allowed;
 }
 </style>

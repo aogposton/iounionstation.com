@@ -1,5 +1,4 @@
 <script setup>
-import sidebar from "@/components/sidebar.vue";
 import { reactive, onMounted, ref } from "vue";
 import { Head, router } from "@inertiajs/vue3";
 

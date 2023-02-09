@@ -76,6 +76,42 @@ class AuthController extends Controller
     }
   }
 
+    public function resetPasswordInternally(Request $request)
+  {
+    $results = [];
+    try{
+
+      $user = Auth::user();
+ 
+      if (!$user) {
+        throw new \Exception('Must be logged in.');
+      }
+
+      if (!$request->password) {
+        throw new \Exception('New password is missing.');
+      }
+
+      if (!$request->confirmPassword) {
+        throw new \Exception('Password confirmation is missing.');
+      }
+
+      if ($request->confirmPassword != $request->password) {
+        throw new \Exception('Passwords dont match');
+      }
+
+      $user->password = Hash::make($request->password);
+      $user->save();
+
+      SendEmail::dispatch("Your password was just reset", "Here is a link ", $user->email);
+
+      return back();
+    } catch (\Exception $error) {
+      return back()->withErrors([
+        'message' => $error->getMessage(),
+      ]);
+    }
+  }
+
   public function resetPassword(Request $request)
   {
     try {

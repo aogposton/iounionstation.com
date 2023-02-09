@@ -1,5 +1,5 @@
 <script>
-import Layout from "@/Layouts/Authenticated.vue";
+import Layout from "@/Layouts/CentralControlLayout.vue";
 export default {
     layout: Layout,
 };

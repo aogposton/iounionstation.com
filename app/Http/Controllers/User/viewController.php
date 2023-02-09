@@ -20,6 +20,18 @@ class viewController extends \App\Http\Controllers\Controller
     return Inertia::render('User/Threads', ['threads' => $threads, "frequencies" => $frequencies, "statuses" => $statuses]);
   }
 
+  public function account(Request $request)
+  {
+    return Inertia::render('User/Account', ['user' => Auth::user()]);
+  }
+
+
+
+  public function billing()
+  {
+    return Inertia::render('User/Billing', ['user' => Auth::user()]);
+  }
+
   public function redditSearch(Request $request)
   {
     $results = [];
