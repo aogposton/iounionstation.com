@@ -78,7 +78,6 @@ function submit() {
                                     class="col justify-content-center align-items-center d-flex"
                                 >
                                     <input
-                                        class="form-control form-control-lg"
                                         type="password"
                                         placeholder="Password"
                                         v-model="form.password"

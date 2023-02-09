@@ -1,3 +1,10 @@
+<script>
+import Layout from "@/Layouts/Authenticated.vue";
+export default {
+    layout: Layout,
+};
+</script>
+
 <script setup>
 import { ref } from "vue";
 import { Head } from "@inertiajs/vue3";

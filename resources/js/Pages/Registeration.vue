@@ -60,16 +60,16 @@ function submit() {
                                     class="col justify-content-center align-items-center d-flex"
                                 >
                                     <h1 style="color: white; font-size: 100px">
-                                        Tomato
+                                        Register
                                     </h1>
                                 </div>
                             </div>
                             <div class="row g-2 m-2">
                                 <div
-                                    class="col justify-content-center align-items-center d-flex"
+                                    class="col-6 offset-3 justify-content-center align-items-center d-flex"
                                 >
                                     <input
-                                        class="form-control form-control-lg"
+                                        class="form-control"
                                         type="text"
                                         placeholder="Email"
                                         autocomplete="email"
@@ -79,7 +79,7 @@ function submit() {
                             </div>
                             <div class="row g-2 m-2">
                                 <div
-                                    class="col justify-content-center align-items-center d-flex"
+                                    class="col-6 offset-3 justify-content-center align-items-center d-flex"
                                 >
                                     <input
                                         class="form-control form-control-lg"
@@ -91,7 +91,7 @@ function submit() {
                             </div>
                             <div class="row g-2 m-2">
                                 <div
-                                    class="col justify-content-center align-items-center d-flex"
+                                    class="col-6 offset-3 justify-content-center align-items-center d-flex"
                                 >
                                     <input
                                         class="form-control form-control-lg"
