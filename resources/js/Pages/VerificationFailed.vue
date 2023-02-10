@@ -21,7 +21,7 @@ defineProps({
             background-size: cover;
         "
     >
-        <Head title="registration" />
+        <Head title="Verification Failed" />
         <div class="container">
             <div class="row">
                 <div class="col">

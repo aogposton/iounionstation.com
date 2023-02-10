@@ -49,7 +49,7 @@ function submit() {
             background-size: cover;
         "
     >
-        <Head title="registration" />
+        <Head title="Registration" />
         <div class="container" v-if="!registrationSuccess">
             <div class="row">
                 <div class="col">

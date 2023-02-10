@@ -6,7 +6,7 @@ export default {
 </script>
 <script setup>
 import { reactive, onMounted, ref, computed } from "vue";
-import { router, usePage } from "@inertiajs/vue3";
+import { router, usePage, Head } from "@inertiajs/vue3";
 
 const toastMessage = ref("");
 let toastElList = null;
@@ -32,16 +32,16 @@ const form = reactive({
 });
 
 const submitForm = () => {
-    router.post(`/threads/query`, form, {
+    router.post(`/routes/query`, form, {
         only: ["results"],
         preserveState: true,
     });
 };
 
 const saveQueryToThread = () => {
-    router.post(`/threads`, form, {
+    router.post(`/routes`, form, {
         onSuccess: () => {
-            router.visit("/threads");
+            router.visit("/routes");
         },
         onError: (errors) => {
             toastMessage.value = `${errors.at_limit}`;
@@ -61,6 +61,7 @@ const saveQueryToThread = () => {
 </style>
 <template>
     <div>
+        <Head title="Add Routes" />
         <div class="container-fluid">
             <div class="row thread">
                 <div class="col">
@@ -89,7 +90,7 @@ const saveQueryToThread = () => {
                         <span v-if="!userCan['add_threads']">
                             You reached your limit
                         </span>
-                        <span v-else> + Save Query as Thread</span>
+                        <span v-else> + Save Query as Route</span>
                     </button>
                 </div>
             </div>

@@ -20,14 +20,14 @@ class AuthController extends Controller
   public function login(Request $request)
   {
     if (Auth::check()) {
-      return redirect()->intended('/threads');
+      return redirect()->intended('/routes');
     }
 
     $credentials = $request->only('email', 'password');
 
     if (Auth::attempt($credentials)) {
       $request->session()->regenerate();
-      return redirect()->intended('/threads');
+      return redirect()->intended('/routes');
     }
 
     return back()->withErrors([
@@ -110,6 +110,14 @@ class AuthController extends Controller
         'message' => $error->getMessage(),
       ]);
     }
+  }
+
+  public function deleteAccount(){
+    $user = Auth::user();
+      SendEmail::dispatch("Your account was delete", "Sad to see you go", $user->email);
+
+    $user->delete();
+    return redirect('/login');
   }
 
   public function resetPassword(Request $request)
@@ -250,7 +258,7 @@ class AuthController extends Controller
       SendEmail::dispatch("You are ready to save time", "Hop in and start playing around", $user->email);
       Auth::login($user, true);
       $request->session()->regenerate();
-      return redirect()->intended('/threads');
+      return redirect()->intended('/routes');
     } catch (\Exception $error) {
       return Inertia::render('VerificationFailed', ['error' => $error->getMessage()]);
     }

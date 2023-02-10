@@ -7,7 +7,7 @@ export default {
 <script setup>
 import { router } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import { usePage, Head } from "@inertiajs/vue3";
 
 const threadCount = computed(() => usePage().props.auth.thread_count);
 const threadLimit = computed(() => usePage().props.auth.thread_limit);
@@ -20,7 +20,7 @@ defineProps({
 
 const deleteThread = async (thread) => {
     if (confirm("delete?")) {
-        router.delete(`/threads/${thread.id}`);
+        router.delete(`/routes/${thread.id}`);
         router.reload();
     }
 };
@@ -31,7 +31,7 @@ const saveThread = async (thread) => {
     delete newThread.status;
     delete newThread.frequency;
 
-    router.post(`/threads/${newThread.id}`, newThread, {
+    router.post(`/routes/${newThread.id}`, newThread, {
         onSuccess: () => {
             showEdit.value = [];
             router.reload({ only: ["threads"] });
@@ -54,11 +54,12 @@ const saveThread = async (thread) => {
 </style>
 <template>
     <div>
+        <Head title="Routes" />
         <h2 class="title">
             <span v-if="threadLimit > -1"
-                >Threads: {{ threadCount }}/{{ threadLimit }}</span
+                >Routes: {{ threadCount }}/{{ threadLimit }}</span
             >
-            <span v-else>Threads: {{ threadCount }} / inifinity</span>
+            <span v-else>Routes: {{ threadCount }} / inifinity</span>
         </h2>
         <div class="container-fluid">
             <div class="row thread" v-for="thread in threads" :key="thread.id">
@@ -88,7 +89,7 @@ const saveThread = async (thread) => {
                             Accumulate: {{ !!thread.accumulate }}
                         </div>
                         <div class="col">
-                            Thread: {{ thread.query_string }} ({{
+                            Route: {{ thread.query_string }} ({{
                                 thread.source.name
                             }})
                         </div>
@@ -103,7 +104,7 @@ const saveThread = async (thread) => {
                                 class="btn btn-sm btn-primary mx-2"
                                 @click="showEdit[thread.id] = true"
                             >
-                                Edit Thread
+                                Edit Route
                             </button>
                         </div>
                     </div>

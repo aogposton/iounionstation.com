@@ -53,11 +53,15 @@ function saveNewPassword() {
         },
     });
 }
+
+function deleteAccount() {
+    router.post("/conductor/delete-account");
+}
 </script>
 
 <template>
     <div>
-        <Head title="Admin users" />
+        <Head title="Account Info" />
         <div class="container-fluid">
             <div class="row">
                 <div class="col">
@@ -135,6 +139,14 @@ function saveNewPassword() {
                             </div>
                         </div>
                         <hr />
+                        <div class="row m-3">
+                            <div class="col-2"></div>
+                            <div class="col">
+                                <a href="javascript:;" @click="deleteAccount()">
+                                    Delete Account
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

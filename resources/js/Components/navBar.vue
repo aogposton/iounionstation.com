@@ -4,7 +4,7 @@
         style="border-bottom: 1px solid #e2e2e8"
     >
         <div class="container-fluid">
-            <a class="navbar-brand" href="/threads">Tomato</a>
+            <a class="navbar-brand" href="/routes">Tomato</a>
             <button
                 class="navbar-toggler"
                 type="button"

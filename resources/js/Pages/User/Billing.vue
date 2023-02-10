@@ -54,7 +54,7 @@ function saveNewPassword() {
 
 <template>
     <div>
-        <Head title="Admin users" />
+        <Head title="Billing Info" />
         <div class="container-fluid">
             <div class="row">
                 <div class="col">

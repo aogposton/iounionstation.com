@@ -4,8 +4,9 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', fn () => inertia('Homepage'));
-Route::get('/register', fn () => inertia('Registeration'));
-Route::get('/login', fn () => inertia('Login'))->name('login');
+Route::get('/login', [App\Http\Controllers\User\viewController::class, 'viewLogin'])->name('login');
+Route::get('/register', [App\Http\Controllers\User\viewController::class, 'viewRegisteration']);
+
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
 Route::post('/registration', [App\Http\Controllers\AuthController::class, 'registration']);
 
@@ -23,21 +24,22 @@ Route::middleware(['isAdmin'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
   // Views
-  Route::get('/threads', [App\Http\Controllers\User\viewController::class, 'index']);
+  Route::get('/routes', [App\Http\Controllers\User\viewController::class, 'index']);
   Route::get('/conductor/account', [App\Http\Controllers\User\viewController::class, 'account']);
   Route::get('/conductor/billing', [App\Http\Controllers\User\viewController::class, 'billing']);
   Route::post('/conductor/reset-password', [App\Http\Controllers\AuthController::class, 'resetPasswordInternally']);
+  Route::post('/conductor/delete-account', [App\Http\Controllers\AuthController::class, 'deleteAccount']);
   
 
 
-  Route::post('/threads', [App\Http\Controllers\ThreadController::class, 'create']);
+  Route::post('/routes', [App\Http\Controllers\ThreadController::class, 'create']);
 
   
-  Route::post('/threads', [App\Http\Controllers\ThreadController::class, 'create']);
-  Route::delete('/threads/{id}', [App\Http\Controllers\ThreadController::class, 'destroy']);
-  Route::post('/threads/{id}', [App\Http\Controllers\ThreadController::class, 'update']);
+  Route::post('/routes', [App\Http\Controllers\ThreadController::class, 'create']);
+  Route::delete('/routes/{id}', [App\Http\Controllers\ThreadController::class, 'destroy']);
+  Route::post('/routes/{id}', [App\Http\Controllers\ThreadController::class, 'update']);
 
-  Route::get('/threads/query', [App\Http\Controllers\ThreadController::class, 'query']);
-  Route::post('/threads/query', [App\Http\Controllers\ThreadController::class, 'query']);
+  Route::get('/routes/query', [App\Http\Controllers\ThreadController::class, 'query']);
+  Route::post('/routes/query', [App\Http\Controllers\ThreadController::class, 'query']);
   Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
 });

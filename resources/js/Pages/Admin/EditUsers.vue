@@ -67,7 +67,7 @@ function deleteUser(user) {
 
 <template>
     <div>
-        <Head title="Admin users" />
+        <Head title="Edit Users" />
         <div class="container-fluid">
             <div class="row">
                 <div class="col p-0">
@@ -197,7 +197,7 @@ function deleteUser(user) {
                                                     >
                                                 </div>
                                             </div>
-                                            Thread Count:
+                                            Route Count:
                                             {{ user.threads.length }}
                                         </div>
                                         <div class="col">

@@ -11,6 +11,6 @@ import { Head } from "@inertiajs/vue3";
 
 <template>
     <div>
-        <Head title="Tomato Home" />
+        <Head title="Data where you need it" />
     </div>
 </template>

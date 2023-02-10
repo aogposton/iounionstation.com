@@ -24,7 +24,7 @@ const showPage = (pageName) => {
 
 <template>
     <div>
-        <Head title="Job Finder" />
+        <Head title="Sites Statistics" />
         <navBar></navBar>
 
         <div class="container-fluid">

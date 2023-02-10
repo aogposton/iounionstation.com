@@ -17,7 +17,21 @@ class viewController extends \App\Http\Controllers\Controller
     $frequencies = \App\Models\Frequency::all();
     $statuses = Status::all();
     $threads = Thread::where('user_id', Auth::id())->with('source', 'status', 'frequency')->get();
-    return Inertia::render('User/Threads', ['threads' => $threads, "frequencies" => $frequencies, "statuses" => $statuses]);
+    return Inertia::render('User/Routes', ['threads' => $threads, "frequencies" => $frequencies, "statuses" => $statuses]);
+  }
+
+  public function viewRegisteration(){
+    if (Auth::check()) {
+      return redirect()->intended('/routes');
+    }
+    return inertia('Registeration');
+  }
+
+  public function viewLogin(){
+    if (Auth::check()) {
+      return redirect()->intended('/routes');
+    }
+    return inertia('Login');
   }
 
   public function account(Request $request)
