@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Abraham\TwitterOAuth\TwitterOAuth;
 use App\Models\Content;
 use App\Models\Status;
-use App\Models\Thread;
+use App\Models\Track;
 use App\Models\FunctionTimeTracker;
 use Illuminate\Support\Facades\Http;
 

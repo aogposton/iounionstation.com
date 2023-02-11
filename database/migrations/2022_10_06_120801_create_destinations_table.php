@@ -18,6 +18,9 @@ return new class extends Migration
             $table->text('name');
             $table->text('credential');
             $table->unsignedBigInteger('destination_type_id');
+            $table->unsignedBigInteger('user_id');
+            $table->boolean('deletable')->default(true);
+            $table->timestamp('verified_at')->nullable(); 
         });
     }
 

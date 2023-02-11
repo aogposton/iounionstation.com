@@ -17,9 +17,16 @@ const destinations = computed(() => usePage().props.destinations);
 const routes = computed(() => usePage().props.routes);
 const sourceTypes = computed(() => usePage().props.sourceTypes);
 
-const newRoute = reactive({
+const newTrack = reactive({
     source_id: null,
+    cargo_id: null,
+    destination_id: null,
+    accumulate: 0,
+    frequency_id: null,
+    process_at: null,
+    track_type_id: null,
 });
+
 onMounted(() => {
     toastElList = [].slice.call(document.querySelectorAll(".toast"));
     toastList = toastElList.map(function (toastEl) {
@@ -29,8 +36,8 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <Head title="Add Routes" />
-        <h2 class="title">Add Routes</h2>
+        <Head title="Tracks" />
+        <h2 class="title">Tracks</h2>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-3">
@@ -38,7 +45,7 @@ onMounted(() => {
                         Source:
                         <select
                             class="form-control"
-                            v-model="newRoute.source_id"
+                            v-model="newTrack.source_id"
                         >
                             <option value="cargo">Cargo</option>
                             <option v-for="source in sources" :key="source.id">
@@ -59,38 +66,40 @@ onMounted(() => {
 
                         <select
                             class="form-control"
-                            v-if="newRoute.source_id == 'cargo'"
+                            v-if="newTrack.source_id == 'cargo'"
                         >
                             <option value="cargo 1">Cargo 1</option>
                         </select>
                     </div>
                 </div>
+                <!-- 
+                $table->boolean('accumulate')->default(0);
+                $table->unsignedBigInteger('frequency_id')->default(1);
+                $table->timestamp('last_processed_at')->nullable();
+                $table->timestamp('process_at')->nullable(); 
+                -->
                 <div class="col-3">
                     <div class="thread">
-                        parameters:
-                        <select class="form-control">
-                            <option v-for="source in sources" :key="source.id">
-                                {{
-                                    source.name ||
-                                    `[${
-                                        sourceTypes.length > 0
-                                            ? sourceTypes.find(
-                                                  (st) =>
-                                                      st.id ==
-                                                      source.source_type_id
-                                              ).name
-                                            : ""
-                                    }] ${source.query_string}`
-                                }}
-                            </option>
+                        Accumulate:
+                        <select
+                            class="form-control"
+                            v-model="newTrack.accumulate"
+                            v-if="newTrack.cargo_id == null"
+                        >
+                            <option :value="0">Per post</option>
+                            <option :value="1">Multiple posts into one</option>
                         </select>
                     </div>
                 </div>
+                <!-- $table->unsignedBigInteger('destination_id'); -->
                 <div class="col-3">
                     <div class="thread">
                         destination:
 
-                        <select class="form-control">
+                        <select
+                            class="form-control"
+                            v-model="newTrack.destination_id"
+                        >
                             <option
                                 v-for="destination in destinations"
                                 :key="destination.id"

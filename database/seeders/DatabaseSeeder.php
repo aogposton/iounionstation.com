@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
     $this->call([
       RoleSeeder::class,
       DestinationTypeSeeder::class,
+      CargoTypeSeeder::class,
+      TrackTypeSeeder::class,
       TierSeeder::class,
       UserSeeder::class,
       SourceTypeSeeder::class,

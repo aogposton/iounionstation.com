@@ -7,5 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class CargoType extends Model
 {
-    use HasFactory;
+    public $timestamps = false;
+
+    protected $fillable = [
+        'name','destination_type_id'
+    ];
 }

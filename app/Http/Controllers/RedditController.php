@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Thread;
+use App\Models\Track;
 use App\Models\Content;
 use App\Models\Source;
 use App\Models\Status;
@@ -138,13 +138,6 @@ class RedditController extends Controller
     return $process->getOutput();
   }
 
-  public function shouldRespond(Content $content): bool
-  {
-    $shouldRespond = false;
-
-    return $shouldRespond;
-  }
-
   public function titleContains($content, $needle): bool
   {
     return str_contains(strtolower(str_replace(' ', '', json_decode($content->metadata)->title)), $needle);
@@ -200,48 +193,31 @@ class RedditController extends Controller
     return false;
   }
 
-  public function shouldRepost(Content $content): bool
-  {
-    $shouldRepost = false;
-
-    return $shouldRepost;
-  }
-
-  public function shouldSend(Content $content): bool
-  {
-    return $this->shouldApproach($content);
-  }
-
-  public function shouldNotify(Content $content, $followup = false): bool
-  {
-    return $this->shouldApproach($content, $followup);
-  }
-
-  public function composeContentEmail(Thread $thread, Content $content): object
+  public function composeContentEmail(Track $track, Content $content): object
   {
     $metadata = json_decode($content->metadata);
-    $source = $thread->source->name;
+    $source = $track->source->name;
     $email = (object)['subject' => '', 'body' => '', 'to' => ''];
 
     //replace links
-    $header = "[via $source: $thread->query_string] $metadata->title";
+    $header = "[via $source: $track->query_string] $metadata->title";
     $formattedBody = preg_replace('/\[(.*?)\]\s*\((.*?)\)/', '<a href="$2">$1</a>', $content->body);
     $footer = "<a href='$metadata->url'>[[[[[[Go To Content]]]]]]</a>";
 
     $email->body = "<b>$header</b>" . "<p>$formattedBody</p>" . "<br /><br />$footer";
 
-    $email->to = $thread->user->email;
+    $email->to = $track->user->email;
     $email->subject = $metadata->title;
 
     return $email;
   }
 
-  public function composeAccumulatedEmail(Thread $thread, $accumulation): object
+  public function composeAccumulatedEmail(Track $track, $accumulation): object
   {
     $email = (object)['subject' => '', 'body' => '', 'to' => ''];
-    $source = $thread->source->name;
-    $email->subject = "[$source: $thread->query_string]";
-    $email->to = $thread->user->email;
+    $source = $track->source->name;
+    $email->subject = "[$source: $track->query_string]";
+    $email->to = $track->user->email;
     $body = "";
 
 

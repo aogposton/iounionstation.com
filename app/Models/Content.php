@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Content extends Model
 {
     protected $fillable = [
-    'body','site_local_id','metadata'
-  ];
+      'body','site_local_id','metadata'
+    ];
 
   protected static function booted()
   {

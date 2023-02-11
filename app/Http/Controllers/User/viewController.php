@@ -4,9 +4,11 @@ namespace App\Http\Controllers\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Thread;
+use App\Models\Track;
 use App\Models\Status;
 use App\Models\DestinationType;
+use App\Models\Cargo;
+use App\Models\CargoType;
 use App\Models\Source;
 use App\Models\SourceType;
 use Inertia\Inertia;
@@ -15,65 +17,44 @@ use Inertia\Inertia;
 class viewController extends \App\Http\Controllers\Controller
 {
 
-  public function index()
+  public function tracks()
   {
     $frequencies = \App\Models\Frequency::all();
     $statuses = Status::all();
-    $threads = Thread::where('user_id', Auth::id())->with('source', 'status', 'frequency')->get();
-    return Inertia::render('User/Routes', ['threads' => $threads, "frequencies" => $frequencies, "statuses" => $statuses]);
-  }
-
-  public function viewEditRoutes()
-  {
-    $user = Auth::user();
-    return Inertia::render('User/EditRoutes', [
+    $tracks = Track::where('user_id', Auth::id())->with('source', 'status', 'frequency')->get();
+      $user = Auth::user();
+    return Inertia::render('User/Tracks', [
       'destinations' => $user->destinations, 
       "sourceTypes" => SourceType::all(), 
       "sources" => $user->sources, 
-      "routes" => $user->threads
+      'tracks' => $tracks, 
+      "frequencies" => $frequencies
     ]);
   }
 
-  
-
-  public function viewDestinations()
+  public function destinations()
   {
     $user = Auth::user();
     $destinationTypes = DestinationType::get();
-    return Inertia::render('User/EditDestinations', ['destinations'=>$user->destinations, 'destinationTypes' => $destinationTypes]);
+    return Inertia::render('User/Destinations', ['destinations'=>$user->destinations, 'destinationTypes' => $destinationTypes]);
   }
 
-  public function viewSources()
+  public function sources()
   {
     $user = Auth::user();
     $sources = Source::get();
     $sourceTypes = SourceType::get();
 
-    return Inertia::render('User/EditSources', ['sources'=>$user->sources,'sourceTypes'=>$sourceTypes]);
+    return Inertia::render('User/Sources', ['sources'=>$user->sources,'sourceTypes'=>$sourceTypes]);
   }
 
-  
-
-  public function viewHome()
+  public function cargo()
   {
-    if (Auth::check()) {
-      return redirect()->intended('/routes');
-    }
-    return inertia('Homepage');
-  }
+    $user = Auth::user();
+    $cargo = Cargo::get();
+    $cargoTypes = CargoType::get();
 
-  public function viewRegisteration(){
-    if (Auth::check()) {
-      return redirect()->intended('/routes');
-    }
-    return inertia('Registeration');
-  }
-
-  public function viewLogin(){
-    if (Auth::check()) {
-      return redirect()->intended('/routes');
-    }
-    return inertia('Login');
+    return Inertia::render('User/Cargo', ['cargo'=>$user->cargo,'cargoTypes'=>$cargoTypes]);
   }
 
   public function account(Request $request)
@@ -81,54 +62,8 @@ class viewController extends \App\Http\Controllers\Controller
     return Inertia::render('User/Account', ['user' => Auth::user()]);
   }
 
-
-
   public function billing()
   {
     return Inertia::render('User/Billing', ['user' => Auth::user()]);
-  }
-
-  public function redditSearch(Request $request)
-  {
-    $results = [];
-
-    if ($request->q) {
-      $results = app('\App\Http\Controllers\RedditController')->getSearchResults($request);
-    }
-
-    return Inertia::render('Reddit/Search', ['results' => $results]);
-  }
-
-  public function redditSubreddit(Request $request)
-  {
-    $results = [];
-
-    if ($request->q) {
-      $results = app('\App\Http\Controllers\RedditController')->getSubredditPosts($request);
-    }
-
-    return Inertia::render('Reddit/Subreddit', ['results' => $results]);
-  }
-
-  public function twitterSearch(Request $request)
-  {
-    $results = [];
-
-    if ($request->q) {
-      $results = app('\App\Http\Controllers\TwitterController')->getSearchResults($request);
-    }
-
-    return Inertia::render('Twitter/Search', ['results' => $results]);
-  }
-
-  public function twitterUser(Request $request)
-  {
-    $results = [];
-
-    if ($request->q) {
-      $results = app('\App\Http\Controllers\TwitterController')->getUserTwitterFeed($request);
-    }
-
-    return Inertia::render('Twitter/User', ['results' => $results]);
   }
 }

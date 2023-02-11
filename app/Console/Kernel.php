@@ -16,7 +16,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
         Log::info('hello from docker');
 
         $schedule->call(function () {

@@ -12,7 +12,7 @@ const can = computed(() => usePage().props.auth.can);
         style="border-bottom: 1px solid #e2e2e8"
     >
         <div class="container-fluid">
-            <a class="navbar-brand" href="/routes">IO Union Station</a>
+            <a class="navbar-brand" href="/tracks">IO Union Station</a>
             <button
                 class="navbar-toggler"
                 type="button"
@@ -81,22 +81,12 @@ const can = computed(() => usePage().props.auth.can);
         <div class="row">
             <div class="col-2">
                 <div class="d-flex flex-column align-items-center" id="sidebar">
-                    <Link class="sidebar-link" href="/routes/active"
-                        >Active Routes</Link
-                    >
-                    <Link
-                        class="sidebar-link"
-                        v-if="can['add_threads']"
-                        href="/routes/edit"
-                        >Edit Routes</Link
-                    >
-                    <span class="sidebar-link-disabled" v-else>Add Route</span>
+                    <Link class="sidebar-link" href="/tracks">Tracks</Link>
                     <Link class="sidebar-link" href="/destinations"
-                        >Edit Destinations</Link
+                        >Destinations</Link
                     >
-                    <Link class="sidebar-link" href="/sources"
-                        >Edit Sources</Link
-                    >
+                    <Link class="sidebar-link" href="/sources">Sources</Link>
+                    <Link class="sidebar-link" href="/cargo">Cargo</Link>
                 </div>
             </div>
             <div class="col-10 p-0">

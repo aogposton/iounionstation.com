@@ -57,9 +57,9 @@ class User extends Authenticatable
     return $this->belongsToMany(Feature::class, 'user_features');
   }
 
-  public function threads()
+  public function tracks()
   {
-    return $this->hasMany(Thread::class);
+    return $this->hasMany(Track::class);
   }
 
   public function destinations()
@@ -72,11 +72,16 @@ class User extends Authenticatable
     return $this->hasMany(Source::class);
   }
 
+  public function cargo()
+  {
+    return $this->hasMany(Cargo::class);
+  }
+
   protected static function booted()
   {
     static::deleted(function ($user) {
-      foreach ($user->threads as $thread) {
-        $thread->delete();
+      foreach ($user->tracks as $track) {
+        $track->delete();
       }
       foreach ($user->destinations as $destination) {
         $destination->delete();

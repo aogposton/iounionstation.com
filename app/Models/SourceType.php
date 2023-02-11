@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
 class SourceType extends Model
 {
     public $timestamps = false;
+
     protected $fillable = [
         'name',
     ];
@@ -33,10 +34,10 @@ class SourceType extends Model
       return $query->where('name', 'Twitter/User')->first()->id;
     }
 
-    public static function scopeEventbriteVenue($query)
-    {
-      return $query->where('name', 'Eventbrite/Venue')->first()->id;
-    }
+    // public static function scopeEventbriteVenue($query)
+    // {
+    //   return $query->where('name', 'Eventbrite/Venue')->first()->id;
+    // }
 
     public static function scopeTwitterSearch($query)
     {
@@ -60,38 +61,5 @@ class SourceType extends Model
     {
       return $query->where('name', 'Reddit/Subreddit')->first()->id;
     }
-
-    public static function scopeCraigslistServices($query)
-    {
-      return $query->where('name', 'Craigslist/Services')->first()->id;
-    }
-
-    public static function scopeCraigslistCommunity($query)
-    {
-      return $query->where('name', 'Craigslist/Community')->first()->id;
-    }
-
-    public static function scopeCraigslistGigs($query)
-    {
-      return $query->where('name', 'Craigslist/Gigs')->first()->id;
-    }
-
-    public static function scopeCraigslistSale($query)
-    {
-      return $query->where('name', 'Craigslist/Sale')->first()->id;
-    }
-
-    public static function scopeCraigslistHousing($query)
-    {
-      return $query->where('name', 'Craigslist/Housing')->first()->id;
-    }
-
-    public static function scopeCraigslistJobs($query)
-    {
-      return $query->where('name', 'Craigslist/Jobs')->first()->id;
-    }
-    public static function scopeCraigslistURL($query)
-    {
-      return $query->where('name', 'Craigslist/URL')->first()->id;
-    }
+   
 }

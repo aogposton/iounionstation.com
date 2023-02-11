@@ -15,13 +15,10 @@ return new class extends Migration
     {
         Schema::create('contents', function (Blueprint $table) {
             $table->id();
-            $table->text('title')->nullable();
             $table->text('body')->nullable();
-            $table->text('link')->nullable();
-            $table->string('published_at')->nullable();
             $table->string('site_local_id');
             $table->unsignedBigInteger('status_id');
-            $table->text('author')->nullable();
+            $table->json('metadata')->nullable();
             $table->timestamps();
         });
     }

@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('function');
             $table->string('start')->nullable();
             $table->string('stop')->nullable();
+             $table->string('notes')->nullable();
+            $table->Integer('status_id');
             $table->timestamps();
         });
     }

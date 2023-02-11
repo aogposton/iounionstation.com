@@ -12,7 +12,7 @@ const can = computed(() => usePage().props.auth.can);
         style="border-bottom: 1px solid #e2e2e8"
     >
         <div class="container-fluid">
-            <a class="navbar-brand" href="/routes">IO Union Station</a>
+            <a class="navbar-brand" href="/tracks">IO Union Station</a>
             <button
                 class="navbar-toggler"
                 type="button"

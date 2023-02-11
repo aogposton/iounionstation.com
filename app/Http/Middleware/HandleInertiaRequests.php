@@ -40,10 +40,10 @@ class HandleInertiaRequests extends Middleware
       $gates['see_stats'] = $isAdmin || $isRoot;
       $gates['edit_users'] = $isAdmin || $isRoot;
 
-      $threadCount = Auth::user()->threads->count();
-      $threadLimit = Auth::user()->tier->thread_limit;
+      $trackCount = Auth::user()->tracks->count();
+      $trackLimit = Auth::user()->tier->track_limit;
 
-      $gates['add_threads'] = $threadLimit == -1 || $threadCount < $threadLimit;
+      $gates['add_tracks'] = $trackLimit == -1 || $trackCount < $trackLimit;
     }
 
     return $gates;
@@ -64,11 +64,11 @@ class HandleInertiaRequests extends Middleware
         ? $request->user()->only('id', 'name', 'email')
         : null,
       'auth.can' => $this->gates(),
-      'auth.thread_limit' => $request->user()
-        ? $request->user()->tier->thread_limit
+      'auth.track_limit' => $request->user()
+        ? $request->user()->tier->track_limit
         : null,
-      'auth.thread_count' => $request->user()
-        ? $request->user()->threads->count()
+      'auth.track_count' => $request->user()
+        ? $request->user()->tracks->count()
         : null,
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy)->toArray(), [

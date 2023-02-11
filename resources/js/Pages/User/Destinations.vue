@@ -31,12 +31,12 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <Head title="Add Routes" />
-        <h2 class="title">Edit Destinations</h2>
+        <Head title="Destinations" />
+        <h2 class="title">Destinations</h2>
         <div class="container-fluid">
             <div class="row">
                 <div
-                    class="col-3 thread"
+                    class="col-3 track"
                     v-for="destination in destinations"
                     :key="destination.id"
                 >
@@ -77,7 +77,7 @@ onMounted(() => {
                     </button>
                 </div>
 
-                <div class="col-3 thread">
+                <div class="col-3 track">
                     <input
                         type="text"
                         class="form-control my-2 w-100"
@@ -135,7 +135,7 @@ onMounted(() => {
     margin: 5px 10px;
     padding: 10px;
 }
-.thread {
+.track {
     border-radius: 10px;
     background-color: white;
     color: black;

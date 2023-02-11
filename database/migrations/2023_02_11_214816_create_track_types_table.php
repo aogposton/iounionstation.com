@@ -13,10 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('destinations', function (Blueprint $table) {
-            $table->boolean('deletable')->default(true);
-            $table->timestamp('verified_at')->nullable(); 
-            //
+        Schema::create('track_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
         });
     }
 
@@ -27,9 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('destinations', function (Blueprint $table) {
-            $table->dropColumn('deletable');
-            $table->dropColumn('verified_at');
-        });
+        Schema::dropIfExists('track_types');
     }
 };

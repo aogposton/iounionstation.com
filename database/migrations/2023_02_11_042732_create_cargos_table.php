@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('cargos', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('name')->nullable();
+            $table->string('title')->nullable();
             $table->mediumText('body')->nullable();
             $table->json('metadata')->nullable();
             $table->integer('cargo_type_id');
