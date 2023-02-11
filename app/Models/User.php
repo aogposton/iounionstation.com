@@ -62,12 +62,30 @@ class User extends Authenticatable
     return $this->hasMany(Thread::class);
   }
 
+  public function destinations()
+  {
+    return $this->hasMany(Destination::class);
+  }
+
+  public function sources()
+  {
+    return $this->hasMany(Source::class);
+  }
+
   protected static function booted()
   {
     static::deleted(function ($user) {
       foreach ($user->threads as $thread) {
         $thread->delete();
       }
+      foreach ($user->destinations as $destination) {
+        $destination->delete();
+      }
+    });
+
+    static::created(function ($user) {
+      $emailType = DestinationType::where('name','email')->first()->id;
+        Destination::firstOrCreate([ 'name'=>"My Email",'credential'=>$user->email,'destination_type_id'=>$emailType,'user_id'=>$user->id, "deletable"=>false, "verified_at"=>\Carbon\Carbon::now()]);
     });
   }
 }

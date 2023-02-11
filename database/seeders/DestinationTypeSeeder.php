@@ -8,7 +8,10 @@ class DestinationTypeSeeder extends Seeder
 {
     public function run()
     {
-        \App\Models\DestinationType::firstOrCreate([ 'name'=>"telegram"]);
-        \App\Models\DestinationType::firstOrCreate([ 'name'=>"email"]);
+        \App\Models\DestinationType::truncate();
+        \App\Models\DestinationType::firstOrCreate([ 'name'=>"Telegram"]);
+        \App\Models\DestinationType::firstOrCreate([ 'name'=>"Reddit/Subreddit"]);
+        // \App\Models\DestinationType::firstOrCreate([ 'name'=>"Reddit/User Chat"]);
+        \App\Models\DestinationType::firstOrCreate([ 'name'=>"Email"]);
     }
 }

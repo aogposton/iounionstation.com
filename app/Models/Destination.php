@@ -10,7 +10,7 @@ class Destination extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'name','credential','destination_type_id'
+        'name','credential','destination_type_id','user_id',"deletable", "verified_at"
     ];
 
     public function type(){

@@ -11,7 +11,9 @@ import { usePage, Head } from "@inertiajs/vue3";
 
 const threadCount = computed(() => usePage().props.auth.thread_count);
 const threadLimit = computed(() => usePage().props.auth.thread_limit);
+
 const showEdit = ref([]);
+
 defineProps({
     threads: Object,
     frequencies: Object,

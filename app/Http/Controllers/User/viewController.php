@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Thread;
 use App\Models\Status;
+use App\Models\DestinationType;
+use App\Models\Source;
+use App\Models\SourceType;
 use Inertia\Inertia;
 
 
@@ -18,6 +21,45 @@ class viewController extends \App\Http\Controllers\Controller
     $statuses = Status::all();
     $threads = Thread::where('user_id', Auth::id())->with('source', 'status', 'frequency')->get();
     return Inertia::render('User/Routes', ['threads' => $threads, "frequencies" => $frequencies, "statuses" => $statuses]);
+  }
+
+  public function viewEditRoutes()
+  {
+    $user = Auth::user();
+    return Inertia::render('User/EditRoutes', [
+      'destinations' => $user->destinations, 
+      "sourceTypes" => SourceType::all(), 
+      "sources" => $user->sources, 
+      "routes" => $user->threads
+    ]);
+  }
+
+  
+
+  public function viewDestinations()
+  {
+    $user = Auth::user();
+    $destinationTypes = DestinationType::get();
+    return Inertia::render('User/EditDestinations', ['destinations'=>$user->destinations, 'destinationTypes' => $destinationTypes]);
+  }
+
+  public function viewSources()
+  {
+    $user = Auth::user();
+    $sources = Source::get();
+    $sourceTypes = SourceType::get();
+
+    return Inertia::render('User/EditSources', ['sources'=>$user->sources,'sourceTypes'=>$sourceTypes]);
+  }
+
+  
+
+  public function viewHome()
+  {
+    if (Auth::check()) {
+      return redirect()->intended('/routes');
+    }
+    return inertia('Homepage');
   }
 
   public function viewRegisteration(){

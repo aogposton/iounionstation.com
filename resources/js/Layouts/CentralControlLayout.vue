@@ -81,14 +81,22 @@ const can = computed(() => usePage().props.auth.can);
         <div class="row">
             <div class="col-2">
                 <div class="d-flex flex-column align-items-center" id="sidebar">
-                    <Link class="sidebar-link" href="/routes">Routes</Link>
+                    <Link class="sidebar-link" href="/routes/active"
+                        >Active Routes</Link
+                    >
                     <Link
                         class="sidebar-link"
                         v-if="can['add_threads']"
-                        href="/routes/query"
-                        >Add Route</Link
+                        href="/routes/edit"
+                        >Edit Routes</Link
                     >
                     <span class="sidebar-link-disabled" v-else>Add Route</span>
+                    <Link class="sidebar-link" href="/destinations"
+                        >Edit Destinations</Link
+                    >
+                    <Link class="sidebar-link" href="/sources"
+                        >Edit Sources</Link
+                    >
                 </div>
             </div>
             <div class="col-10 p-0">

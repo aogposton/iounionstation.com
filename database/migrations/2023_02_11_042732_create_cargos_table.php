@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sources', function (Blueprint $table) {
+        Schema::create('cargos', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
+            $table->string('title');
+            $table->mediumText('body')->nullable();
+            $table->json('metadata')->nullable();
+            $table->integer('cargo_type_id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('source_type_id');
-            $table->string('query_string');
-            $table->timestamp('verified_at');
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sources');
+        Schema::dropIfExists('cargos');
     }
 };

@@ -62,8 +62,8 @@ class TwitterController extends Controller
     ])->get("https://api.twitter.com/1.1/statuses/user_timeline.json", $baseQuery)->json();
 
     $contentArray = collect();
-
-    if (!array_key_exists("error", $res)) {
+    
+    if (!array_key_exists("errors", $res)&&!array_key_exists("error", $res)) {
       foreach ($res as $tweet) {
         $tweet = (object)$tweet;
         $content = Content::where('site_local_id', $tweet->id)->first() ?? $this->toContent($tweet);

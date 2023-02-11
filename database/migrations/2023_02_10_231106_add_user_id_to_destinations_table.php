@@ -13,14 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sources', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->nullable();
+        Schema::table('destinations', function (Blueprint $table) {
+            //
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('source_type_id');
-            $table->string('query_string');
-            $table->timestamp('verified_at');
-            $table->timestamps();
         });
     }
 
@@ -31,6 +26,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sources');
+        Schema::table('destinations', function (Blueprint $table) {
+            //
+            $table->dropColumn('user_id');
+        });
     }
 };

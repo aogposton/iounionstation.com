@@ -236,34 +236,4 @@ class ThreadController extends Controller
 
     return response('', 200);
   }
-
-  public function query(Request $request)
-  {
-    $results = [];
-
-    if ($request->q) {
-      $source = Source::where('name', $request->source)->first();
-      switch ($source->id) {
-        case (new Source)->RedditSearch():
-          $controller = '\App\Http\Controllers\RedditController';
-          $function  = 'getSearchResults';
-          break;
-        case (new Source)->Subreddit():
-          $controller = '\App\Http\Controllers\RedditController';
-          $function  = 'getSubredditPosts';
-          break;
-        case (new Source)->TwitterSearch():
-          $controller = '\App\Http\Controllers\TwitterController';
-          $function  = 'getSearchResults';
-          break;
-        case (new Source)->TwitterUser():
-          $controller = '\App\Http\Controllers\TwitterController';
-          $function  = 'getUserTwitterFeed';
-          break;
-      };
-      $results = app($controller)->{$function}($request);
-    }
-
-    return Inertia::render('User/AddThread', ['results' => $results]);
-  }
 }
