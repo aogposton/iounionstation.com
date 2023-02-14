@@ -20,19 +20,19 @@ class TierSeeder extends Seeder
       [
         'name' => 'alpha',
         'monthly_email_limit' => '100',
-        'thread_limit' => '10',
+        'track_limit' => '10',
         'price' => "00.00"
       ],
       [
         'name' => 'beta',
         'monthly_email_limit' => '200',
-        'thread_limit' => '25',
+        'track_limit' => '25',
         'price' => "10.00"
       ],
       [
         'name' => 'Internal',
         'monthly_email_limit' => '-1',
-        'thread_limit' => '-1',
+        'track_limit' => '-1',
         'price' => "-1"
       ],
     ];

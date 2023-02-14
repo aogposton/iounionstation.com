@@ -32,15 +32,16 @@ Route::middleware(['auth'])->group(function () {
   Route::post('/conductor/reset-password', [App\Http\Controllers\AuthController::class, 'resetPasswordInternally']);
   Route::post('/conductor/delete-account', [App\Http\Controllers\AuthController::class, 'deleteAccount']);
   
-  Route::post('/tracks', [App\Http\Controllers\ThreadController::class, 'create']);
-  Route::delete('/tracks/{id}', [App\Http\Controllers\ThreadController::class, 'destroy']);
+  Route::post('/tracks', [App\Http\Controllers\TrackController::class, 'create']);
+  Route::delete('/tracks/{id}', [App\Http\Controllers\TrackController::class, 'destroy']);
   Route::post('/tracks/{id}', [App\Http\Controllers\ThreadController::class, 'update']);
   Route::post('/sources', [App\Http\Controllers\SourceController::class, 'create']);
   Route::post('/cargo', [App\Http\Controllers\CargoController::class, 'create']);
   Route::put('/cargo', [App\Http\Controllers\CargoController::class, 'update']);
   Route::delete('/sources/{id}', [App\Http\Controllers\SourceController::class, 'delete']);
   Route::delete('/cargo/{id}', [App\Http\Controllers\CargoController::class, 'delete']);
-
+  
+  Route::get('/test', [App\Http\Controllers\TrackController::class,'index']);
 
   Route::post('/sources/verify', [App\Http\Controllers\SourceController::class, 'verify']);
 

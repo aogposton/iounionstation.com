@@ -17,14 +17,14 @@ class GetFreshContent implements ShouldQueue
 
     public $tries = 5;
     
-    public $thread;
+    public $track;
     public $controller;
     public $function;
     public $sync;
 
-    public function __construct(Thread $thread, string $controller, string $function, $sync = false)
+    public function __construct(Track $track, string $controller, string $function, $sync = false)
     {
-        $this->thread = $thread;
+        $this->track = $track;
         $this->controller = $controller;
         $this->function = $function;
         $this->sync = $sync;
@@ -37,6 +37,6 @@ class GetFreshContent implements ShouldQueue
      */
     public function handle()
     {
-      app('\App\Http\Controllers\ThreadController')->getFreshContent($this->thread, $this->controller, $this->function, $this->sync);
+      app('\App\Http\Controllers\TrackController')->getFreshContent($this->track, $this->controller, $this->function, $this->sync);
     }
 }

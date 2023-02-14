@@ -9,7 +9,7 @@ class Tier extends Model
   public $fillable = [
     'name',
     'monthly_email_limit',
-    'thread_limit',
+    'track_limit',
     'price',
   ];
 }

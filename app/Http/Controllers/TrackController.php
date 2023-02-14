@@ -2,19 +2,152 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use App\Models\Source;
+use App\Models\SourceType;
+use App\Models\Destination;
+use App\Models\Track;
+use App\Models\TrackType;
+use App\Models\Frequency;
+use App\Jobs\GetFreshContent;
+use App\Jobs\SendEmail;
+
 
 class TrackController extends Controller
 {
     //
-// private function sendEmail($sync, $email)
-//   {
-//     if ($sync) {
-//       SendEmail::dispatchSync($email->subject, $email->body, $email->to);
-//     } else {
-//       SendEmail::dispatch($email->subject, $email->body, $email->to);
-//     }
-//   }
+    public function index(){
+        Log::info('Checking Tracks');
+        $tracks = Track::all();
+        foreach($tracks as $track){
+            Log::info("Checking Track $track->id");
+
+            // $lpa = !$track->last_processed_at ?? new \Carbon\Carbon($track->last_processed_at);
+            // $npt = $lpa->addMinutes($track->frequency->minutes); 
+
+            $pa = new \Carbon\Carbon($track->process_at);
+            
+            if ($pa->lte(now())) {
+                switch($track->track_type_id){
+                    case(TrackType::where('name','Cargo')->first()->id):
+                        $this->processCargoTrack($track,true);
+                        break;
+                    case (TrackType::where('name','Source')->first()->id):
+                        $this->processSourceTrack($track, true);
+                        break;
+                }
+            }
+
+        }
+    }
+
+    public function processSourceTrack(Track $track, $sync = false, $force = false){
+        Log::info("Processing Track $track->id");
+
+        $controller = null;
+        $function = null;
+
+
+        switch ($track->source->source_type_id) {
+            case (new SourceType)->RedditSearch():
+                $controller = '\App\Http\Controllers\RedditController';
+                $function  = 'getSearchResults';
+                break;
+            case (new SourceType)->Subreddit():
+                $controller = '\App\Http\Controllers\RedditController';
+                $function  = 'getSubredditPosts';
+                break;
+            case (new SourceType)->TwitterSearch():
+                $controller = '\App\Http\Controllers\TwitterController';
+                $function  = 'getSearchResults';
+                break;
+            case (new SourceType)->TwitterUser():
+                $controller = '\App\Http\Controllers\TwitterController';
+                $function  = 'getUserTwitterFeed';
+                break;
+        };
+            
+        Log::info("Getting Content for Track $controller, $function");
+
+        if (!$controller) {
+            return false;
+        }
+
+        if ($sync) {
+            GetFreshContent::dispatchSync($track, $controller, $function, true);
+        } else {
+            GetFreshContent::dispatch($track, $controller, $function);
+        }
+        return true;
+    }
+
+    public function getFreshContent($track, $controller, $function, $sync = false)
+    {
+        Log::info("Getting Content for Track $track->id");
+
+        
+        $req = new Request(['q' => $track->source->query_string]);
+        $res = app($controller)->{$function}($req);
+        $shouldAccumulate =  filter_var($track->accumulate, FILTER_VALIDATE_BOOLEAN)||!$track->initiated;
+
+        if ($shouldAccumulate) {
+            $accumulation = collect();
+        }
+
+        foreach ($res->data as $content) {
+            if (!in_array($content->id, $track->content_array)) {
+                Log::info("$track->id has new content");
+                // if ($shouldApproach) {
+                //     $this->approach($sync, $controller, $content);
+                // }
+
+                if ($shouldAccumulate) {
+                    $accumulation->push($content);
+                    continue;
+                }
+
+                $email = app($controller)->composeContentEmail($track, $content);
+                $this->sendEmail($sync, $email);
+            }
+        }
+
+        if ($shouldAccumulate && $accumulation->count() > 1) {
+            $email = app($controller)->composeAccumulatedEmail($track, $accumulation);
+            $this->sendEmail($sync, $email);
+        } else if ($shouldAccumulate && $accumulation->count() == 1) {
+            $email = app($controller)->composeContentEmail($track, $accumulation[0]);
+            $this->sendEmail($sync, $email);
+        }
+
+            $track->content_array = $res->data->map(function ($item) {
+            return $item->id;
+        });
+
+        $track->last_processed_at = \Carbon\Carbon::now();
+        $track->process_counter ++;
+        $track->save();
+
+        $res = null;
+        $track = null;
+        $req = null;
+    }
+
+    public function processCargoTrack(Track $track){
+        dd('cargo',$track);
+    }
+
+    private function sendEmail($sync, $email)
+    {
+        Log::info("Sending email to $email->to with subject $email->subject");
+
+        if ($sync) {
+        SendEmail::dispatchSync($email->subject, $email->body, $email->to);
+        } else {
+        SendEmail::dispatch($email->subject, $email->body, $email->to);
+        }
+    }
 
 //   private function approach($sync, $controller, $content)
 //   {
@@ -25,149 +158,54 @@ class TrackController extends Controller
 //       Approach::dispatch($controller, $content, $script);
 //     }
 //   }
+//   
 
-//   public function getFreshcontent($track, $controller, $function, $sync = false)
-//   {
-//     $req = new Request(['q' => $track->query_string]);
-//     $res = app($controller)->{$function}($req);
-//     $shouldAccumulate =  filter_var($track->accumulate, FILTER_VALIDATE_BOOLEAN);
-
-//     if ($shouldAccumulate) {
-//       $accumulation = collect();
-//     }
-
-//     foreach ($res->data as $content) {
-
-//       if (!in_array($content->id, $track->content_array)) {
-//         $shouldRespond    = app($controller)->shouldRespond($content);
-//         $shouldApproach   = app($controller)->shouldApproach($content);
-//         $shouldRepost     = app($controller)->shouldRepost($content);
-//         $shouldSend       = app($controller)->shouldSend($content);
-//         $shouldNotify     = app($controller)->shouldNotify($content);
-
-//         if ($shouldApproach) {
-//           $this->approach($sync, $controller, $content);
-//         }
-
-//         if ($shouldAccumulate) {
-//           $accumulation->push($content);
-//           continue;
-//         }
-
-//         if ($shouldSend) {
-//           $email = app($controller)->composeContentEmail($track, $content);
-//           $this->sendEmail($sync, $email);
-//         }
-//       }
-//     }
-
-//     if ($shouldAccumulate && $accumulation->count() > 1) {
-//       $email = app($controller)->composeAccumulatedEmail($track, $accumulation);
-//       $this->sendEmail($sync, $email);
-//     } else if ($shouldAccumulate && $accumulation->count() == 1) {
-//       $email = app($controller)->composeContentEmail($track, $accumulation[0]);
-//       $this->sendEmail($sync, $email);
-//     }
-
-//     $track->content_array = $res->data->map(function ($item) {
-//       return $item->id;
-//     });
-//     $track->last_processed_at = \Carbon\Carbon::now();
-//     $track->save();
-
-//     $res = null;
-//     $track = null;
-//     $shouldSend = null;
-//     $shouldNotify = null;
-//     $shouldRepost = null;
-//     $shouldRespond = null;
-//     $shouldApproach = null;
-//     $req = null;
-//   }
-
-
-//   public function watchTrack(Track $track, $sync = false, $force = false)
-//   {
-//     $lpa = new \Carbon\Carbon($track->last_processed_at);
-//     $npt = $lpa->addMinutes($track->frequency->minutes); // next process time
-//     if (!$force) {
-//       if (!$npt->lte(now())) {
-//         return false;
-//       }
-//     }
-
-//     $controller = null;
-//     $function = null;
-
-//     switch ($track->source_id) {
-//       case (new SourceType)->RedditSearch():
-//         $controller = '\App\Http\Controllers\RedditController';
-//         $function  = 'getSearchResults';
-//         break;
-//       case (new SourceType)->Subreddit():
-//         $controller = '\App\Http\Controllers\RedditController';
-//         $function  = 'getSubredditPosts';
-//         break;
-//       case (new SourceType)->TwitterSearch():
-//         $controller = '\App\Http\Controllers\TwitterController';
-//         $function  = 'getSearchResults';
-//         break;
-//       case (new SourceType)->TwitterUser():
-//         $controller = '\App\Http\Controllers\TwitterController';
-//         $function  = 'getUserTwitterFeed';
-//         break;
-//     };
-
-
-//     if (!$controller) {
-//       return false;
-//     }
-
-//     if ($sync) {
-//       GetFreshContent::dispatchSync($track, $controller, $function, true);
-//     } else {
-//       GetFreshContent::dispatch($track, $controller, $function);
-//     }
-//     return true;
-//   }
 
 //   public function update(Request $request, $id)
 //   {
-//     $thread = (new Thread)->find($id);
+//     $track = (new Thread)->find($id);
 
 //     foreach ($request->all() as $property => $value) {
-//       $thread->{$property} = $value;
+//       $track->{$property} = $value;
 //     }
-//     $thread->save();
+//     $track->save();
 //   }
 
 
-//   public function create(Request $req)
-//   {
-//     $user = $req->user();
-//     $tier = $user->tier;
+  public function create(Request $request)
+  {
+    $user = Auth::user();
+    $tier = $user->tier;
 
-//     if ($tier->name !== 'Internal' && !($user->threads->count() < $tier->thread_limit)) {
-//       return back()->withErrors([
-//         'at_limit' => 'You have hit your limit of threads. Delete a thread to add another one.',
-//       ]);
-//     }
+    if ($tier->name !== 'Internal' && !($user->tracks->count() < $tier->track_limit)) {
+      return back()->withErrors([
+        'at_limit' => 'You have hit your limit of tracks. Delete a track to add another one.',
+      ]);
+    }
+// \Carbon\Carbon::now()->addMInutes(Frequency::find($request->frequency_id)->minutes)->toJson()
+    
+    $track = new Track;
+    $track->source_id = $request->source_id;
+    $track->frequency_id = $request->frequency_id;
+    $track->user_id = $user->id;
+    $track->cargo_id = $request->cargo_id;
+    $track->track_type_id = $request->track_type_id;
+    $track->destination_id = $request->destination_id;
+    $track->accumulate = $request->accumulate;
+    $track->process_counter = 0;
+    $track->initiated = false;
+    $track->content_array = collect();
+    $track->metadata = collect();
+    $track->last_processed_at = null;
+    $track->process_at = \Carbon\Carbon::now();
+    $track->save();
 
-//     $query_string = (string) $req->q;
-//     $source = SourceType::where('name', $req->source)->first();
+    return response('', 200);
+  }
 
-//     $thread = new Thread();
-//     $thread->source_id = $source->id;
-//     $thread->query_string = $query_string;
-//     $thread->frequency_id = Frequency::EveryMinute();
-//     $thread->user_id = $user->id;
-//     $thread->accumulate = false;
-//     $thread->content_array = [];
-//     $thread->status_id = (new Status)->watching();
-//     $thread->last_processed_at = \Carbon\Carbon::now();
-//     $thread->save();
-
-//     return response('', 200);
-//   }
+    public function destroy($id){
+        Track::where('id', $id)->where('user_id', Auth::user()->id)->delete();
+        return response('',200);
+    }
 
 }

@@ -49,6 +49,7 @@ class TwitterController extends Controller
     $ftt = FunctionTimeTracker::create(['function' => "$this->cPath\\" . __FUNCTION__]);
 
     $query_string = "$req->q";
+
     $baseQuery = [
       "screen_name" => $query_string,
       "tweet_mode" => 'extended',
@@ -151,15 +152,15 @@ class TwitterController extends Controller
     return $shouldNotify;
   }
 
-  public function composeContentEmail(Thread $thread, Content $content): object
+  public function composeContentEmail(Track $track, Content $content): object
   {
     $metadata = json_decode($content->metadata);
-    $source = $thread->source->name;
+    $source = $track->source->name;
     $email = (object)['subject' => '', 'body' => '', 'to' => ''];
-    $email->to = $thread->user->email;
+    $email->to = $track->user->email;
     $email->subject = $content->body;
     $email->body = "";
-    $email->body = $email->body . "<b> From @{$metadata->user->handle} via [$source: $thread->query_string]: </b><br><br>";
+    $email->body = $email->body . "<b> From @{$metadata->user->handle} via [$source: $track->query_string]: </b><br><br>";
     $email->body = $email->body . "$content->body <br> <br>";
     $email->body = $email->body . "{$metadata->tweetURL} <br>";
     $email->body = $email->body . "{$metadata->user->handle}<br>";
@@ -168,12 +169,12 @@ class TwitterController extends Controller
     return $email;
   }
 
-  public function composeAccumulatedEmail(Thread $thread, $accumulation): object
+  public function composeAccumulatedEmail(Track $track, $accumulation): object
   {
-    $source = $thread->source->name;
+    $source = $track->source->name;
     $email = (object)['subject' => '', 'body' => '', 'to' => ''];
-    $email->subject = "[$source: $thread->query_string]";
-    $email->to = $thread->user->email;
+    $email->subject = "[$source: $track->query_string]";
+    $email->to = $track->user->email;
     $body = "";
 
     foreach ($accumulation as $content) {

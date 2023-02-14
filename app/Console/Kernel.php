@@ -16,10 +16,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        Log::info('hello from docker');
-
         $schedule->call(function () {
-            app('\App\Http\Controllers\ThreadController')->watch();
+            app('\App\Http\Controllers\TrackController')->index();
         })->everyMinute();
     }
 

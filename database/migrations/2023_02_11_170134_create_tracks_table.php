@@ -21,9 +21,11 @@ return new class extends Migration
             $table->unsignedBigInteger('track_type_id')->nullable();
             $table->unsignedBigInteger('destination_id');
             $table->boolean('accumulate')->default(0);
+            $table->boolean('initiated')->default(0);
             $table->json('content_array');
             $table->json('metadata')->nullable();
             $table->unsignedBigInteger('frequency_id')->nullable();
+            $table->unsignedBigInteger('process_counter')->nullable();
             $table->timestamp('last_processed_at')->nullable();
             $table->timestamp('process_at')->nullable();
             $table->timestamps();

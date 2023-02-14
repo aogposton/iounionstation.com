@@ -19,27 +19,6 @@ defineProps({
     frequencies: Object,
     statuses: Object,
 });
-
-const deletetrack = async (track) => {
-    if (confirm("delete?")) {
-        router.delete(`/track/${track.id}`);
-        router.reload();
-    }
-};
-const savetrack = async (track) => {
-    const newtrack = Object.assign({}, track);
-
-    delete newtrack.source;
-    delete newtrack.status;
-    delete newtrack.frequency;
-
-    router.post(`/track/${newtrack.id}`, newtrack, {
-        onSuccess: () => {
-            showEdit.value = [];
-            router.reload({ only: ["tracks"] });
-        },
-    });
-};
 </script>
 <style>
 .title {
@@ -57,12 +36,7 @@ const savetrack = async (track) => {
 <template>
     <div>
         <Head title="Routes" />
-        <h2 class="title">
-            <span v-if="trackLimit > -1"
-                >Routes: {{ trackCount }}/{{ trackLimit }}</span
-            >
-            <span v-else>Routes: {{ trackCount }} / inifinity</span>
-        </h2>
+        <h2 class="title"></h2>
         <div class="container-fluid">
             <div class="row track" v-for="track in tracks" :key="track.id">
                 <div class="container-fluid">

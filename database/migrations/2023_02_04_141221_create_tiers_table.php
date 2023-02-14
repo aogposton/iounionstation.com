@@ -17,7 +17,7 @@ return new class extends Migration
       $table->id();
       $table->string('name');
       $table->integer('monthly_email_limit');
-      $table->integer('thread_limit');
+      $table->integer('track_limit');
       $table->double('price', 4, 2);
       $table->timestamps();
     });
