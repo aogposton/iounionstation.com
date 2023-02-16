@@ -28,7 +28,30 @@ const can = computed(() => usePage().props.auth.can);
                 <ul
                     class="navbar-nav w-100 d-flex justify-content-between me-auto mb-2 mb-lg-0"
                 >
-                    <li class="nav-item"></li>
+                    <li class="nav-item d-block d-sm-none">
+                        <a class="btn btn-outline w-100 my-1" href="/tracks"
+                            >Tracks</a
+                        >
+                    </li>
+                    <li class="nav-item d-block d-sm-none">
+                        <a
+                            class="btn btn-outline w-100 my-1"
+                            href="/destinations"
+                            >Destinations</a
+                        >
+                    </li>
+                    <li class="nav-item d-block d-sm-none">
+                        <a class="btn btn-outline w-100 my-1" href="/sources"
+                            >Sources</a
+                        >
+                    </li>
+                    <li class="nav-item d-block d-sm-none">
+                        <a class="btn btn-outline w-100 my-1" href="/cargo"
+                            >Cargo</a
+                        >
+                    </li>
+                    <div class="d-flex flex-column align-items-center"></div>
+
                     <li class="nav-item dropdown">
                         <a
                             class="nav-link dropdown-toggle"
@@ -71,16 +94,10 @@ const can = computed(() => usePage().props.auth.can);
             </div>
         </div>
     </nav>
-    <div
-        class="container-fluid"
-        style="
-            background-image: url('/images/user-bg.jpg');
-            background-size: cover;
-        "
-    >
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-2">
-                <div class="d-flex flex-column align-items-center" id="sidebar">
+            <div class="d-none d-md-block col-md-2">
+                <div class="d-flex flex-column align-items-center">
                     <Link class="sidebar-link" href="/tracks">Tracks</Link>
                     <Link class="sidebar-link" href="/destinations"
                         >Destinations</Link
@@ -89,9 +106,9 @@ const can = computed(() => usePage().props.auth.can);
                     <Link class="sidebar-link" href="/cargo">Cargo</Link>
                 </div>
             </div>
-            <div class="col-10 p-0">
+            <div class="col-12 col-md-10">
                 <div>
-                    <slot />
+                    <slot></slot>
                 </div>
             </div>
         </div>
@@ -131,10 +148,13 @@ const can = computed(() => usePage().props.auth.can);
     line-height: 40px;
 }
 .sidebar-link:hover {
-    background-color: #e2e2e8;
+    background-color: lightblue;
 }
 .sidebar-link-disabled:hover {
     background-color: #b7b7c6;
     cursor: not-allowed;
+}
+.title {
+    color: black;
 }
 </style>

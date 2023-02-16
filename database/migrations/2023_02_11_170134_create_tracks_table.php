@@ -21,6 +21,9 @@ return new class extends Migration
             $table->unsignedBigInteger('track_type_id')->nullable();
             $table->unsignedBigInteger('destination_id');
             $table->boolean('accumulate')->default(0);
+            $table->boolean('is_routine')->default(0);
+            $table->string('scheduled_day')->nullable();
+            $table->time('scheduled_time')->nullable();
             $table->boolean('initiated')->default(0);
             $table->json('content_array');
             $table->json('metadata')->nullable();

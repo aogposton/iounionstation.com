@@ -156,8 +156,7 @@ class TwitterController extends Controller
   {
     $metadata = json_decode($content->metadata);
     $source = $track->source->name;
-    $email = (object)['subject' => '', 'body' => '', 'to' => ''];
-    $email->to = $track->user->email;
+    $email = (object)['subject' => '', 'body' => ''];
     $email->subject = $content->body;
     $email->body = "";
     $email->body = $email->body . "<b> From @{$metadata->user->handle} via [$source: $track->query_string]: </b><br><br>";
@@ -172,9 +171,8 @@ class TwitterController extends Controller
   public function composeAccumulatedEmail(Track $track, $accumulation): object
   {
     $source = $track->source->name;
-    $email = (object)['subject' => '', 'body' => '', 'to' => ''];
+    $email = (object)['subject' => '', 'body' => ''];
     $email->subject = "[$source: $track->query_string]";
-    $email->to = $track->user->email;
     $body = "";
 
     foreach ($accumulation as $content) {

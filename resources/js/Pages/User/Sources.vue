@@ -53,7 +53,6 @@ const querystring = computed(() => {
 });
 
 function verifyNewSource() {
-    console.log("verify source", newSource);
     loading.value = true;
     axios.post(`/sources/verify`, newSource).then((response) => {
         loading.value = false;
@@ -186,21 +185,14 @@ onMounted(() => {
     </div>
 </template>
 <style>
-.title {
-    color: white;
-}
 .right-side {
     border-radius: 10px;
     background-color: white;
     color: black;
-    margin: 5px 10px;
-    padding: 10px;
 }
 .thread {
     border-radius: 10px;
     background-color: white;
     color: black;
-    margin: 5px 10px;
-    padding: 10px;
 }
 </style>

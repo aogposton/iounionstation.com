@@ -22,12 +22,13 @@ class viewController extends \App\Http\Controllers\Controller
   public function tracks()
   {
     $user = Auth::user();
-
+    $tracks = Track::where('user_id',$user->id)->with('source','cargo','destination','frequency')->get();
+    // dd($tracks);
     return Inertia::render('User/Tracks', [
       'destinations' => $user->destinations, 
       "sourceTypes" => SourceType::all(), 
       "sources" => $user->sources, 
-      'tracks' => $user->tracks, 
+      'tracks' => $tracks, 
       "frequencies" => Frequency::all(),
       "trackTypes" => TrackType::all(),
       "cargo" => $user->cargo,

@@ -36,14 +36,18 @@ Route::middleware(['auth'])->group(function () {
   Route::delete('/tracks/{id}', [App\Http\Controllers\TrackController::class, 'destroy']);
   Route::post('/tracks/{id}', [App\Http\Controllers\ThreadController::class, 'update']);
   Route::post('/sources', [App\Http\Controllers\SourceController::class, 'create']);
+  Route::post('/destinations/verify', [App\Http\Controllers\DestinationController::class, 'initDestinationVerification']);
   Route::post('/cargo', [App\Http\Controllers\CargoController::class, 'create']);
   Route::put('/cargo', [App\Http\Controllers\CargoController::class, 'update']);
   Route::delete('/sources/{id}', [App\Http\Controllers\SourceController::class, 'delete']);
   Route::delete('/cargo/{id}', [App\Http\Controllers\CargoController::class, 'delete']);
+  Route::delete('/destinations/{id}', [App\Http\Controllers\DestinationController::class, 'delete']);
   
   Route::get('/test', [App\Http\Controllers\TrackController::class,'index']);
-
+  
   Route::post('/sources/verify', [App\Http\Controllers\SourceController::class, 'verify']);
-
+  
   Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
 });
+
+Route::get('/destinations/verify', [App\Http\Controllers\DestinationController::class, 'verifyEmailDestination']);

@@ -14,24 +14,23 @@ class SourceController extends Controller
         $sourceType = SourceType::find($request->source_type_id);
         $results = [];
         $request->q = $request->query_string;
-
         switch ($sourceType->id) {
             case (new SourceType)->RedditSearch():
-            $controller = '\App\Http\Controllers\RedditController';
-            $function  = 'getSearchResults';
-            break;
+                $controller = '\App\Http\Controllers\RedditController';
+                $function  = 'getSearchResults';
+                break;
             case (new SourceType)->Subreddit():
-            $controller = '\App\Http\Controllers\RedditController';
-            $function  = 'getSubredditPosts';
-            break;
+                $controller = '\App\Http\Controllers\RedditController';
+                $function  = 'getSubredditPosts';
+                break;
             case (new SourceType)->TwitterSearch():
-            $controller = '\App\Http\Controllers\TwitterController';
-            $function  = 'getSearchResults';
-            break;
+                $controller = '\App\Http\Controllers\TwitterController';
+                $function  = 'getSearchResults';
+                break;
             case (new SourceType)->TwitterUser():
-            $controller = '\App\Http\Controllers\TwitterController';
-            $function  = 'getUserTwitterFeed';
-            break;
+                $controller = '\App\Http\Controllers\TwitterController';
+                $function  = 'getUserTwitterFeed';
+                break;
         };
 
         $results = app($controller)->{$function}($request);

@@ -86,19 +86,16 @@ onMounted(() => {
 <template>
     <div>
         <Head title="Edit Sources" />
-        <h2 class="title">Edit Cargo</h2>
         <div class="container-fluid">
-            <div class="row g-3">
-                <div class="col-3">
-                    <div class="w-100 thread">
-                        <button
-                            class="btn btn-sm btn-primary w-100"
-                            @click="createNewCargo()"
-                        >
-                            Create Cargo
-                        </button>
-                    </div>
-                    <div class="container-fluid mt-5 thread">
+            <div class="row">
+                <div class="col-12">
+                    <button
+                        class="btn btn-sm btn-primary w-100"
+                        @click="createNewCargo()"
+                    >
+                        Create Cargo
+                    </button>
+                    <div class="container-fluid mt-5">
                         <h2>My Cargo:</h2>
                         <div class="row" v-for="box in cargo" :key="box.id">
                             <div class="col">
@@ -116,9 +113,9 @@ onMounted(() => {
                         </div>
                     </div>
                 </div>
-                <div class="col-9">
+                <div class="col-12">
                     <div
-                        class="thread w-100 m-0"
+                        class="w-100 m-0"
                         v-if="showNewCargo"
                         :key="selectedCargo"
                     >
@@ -232,20 +229,14 @@ onMounted(() => {
     </div>
 </template>
 <style>
-.title {
-    color: white;
-}
 .right-side {
     border-radius: 10px;
     background-color: white;
     color: black;
-    margin: 5px 10px;
-    padding: 10px;
 }
 .thread {
     border-radius: 10px;
     background-color: white;
     color: black;
-    padding: 10px;
 }
 </style>

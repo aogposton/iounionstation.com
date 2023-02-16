@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('destination_type_id');
             $table->unsignedBigInteger('user_id');
             $table->boolean('deletable')->default(true);
+            $table->string('verify_token')->nullable();
             $table->timestamp('verified_at')->nullable(); 
         });
     }

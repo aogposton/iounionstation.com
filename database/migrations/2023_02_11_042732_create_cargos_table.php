@@ -20,6 +20,7 @@ return new class extends Migration
             $table->mediumText('body')->nullable();
             $table->json('metadata')->nullable();
             $table->integer('cargo_type_id');
+            $table->integer('status_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });

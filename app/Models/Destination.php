@@ -16,4 +16,8 @@ class Destination extends Model
     public function type(){
        return $this->belongsTo(DestinationType::class,'destination_type_id');
     }
+
+    public function tracks(){
+       return $this->hasMany(Track::class,'destination_id');
+    }
 }

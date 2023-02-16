@@ -43,6 +43,7 @@ class RedditController extends Controller
     $response_raw = curl_exec($ch);
     $response = json_decode($response_raw);
     curl_close($ch);
+
     return $response->access_token;
   }
 
@@ -82,9 +83,10 @@ class RedditController extends Controller
 
   public function getSubredditPosts(Request $req)
   {
-    $query_string = (string)$req->q;
+    $query_string = str_replace('r/','',(string)$req->q);
     $ftt = FunctionTimeTracker::create(['function' => "$this->cPath\\" . __FUNCTION__]);
     $content_array = collect();
+
 
     $accessToken = $this->getAccessToken();
     $rawResponse = Http::acceptJson()->withToken($accessToken)->get("https://reddit.com/r/{$query_string}/new.json")->json();
@@ -197,7 +199,7 @@ class RedditController extends Controller
   {
     $metadata = json_decode($content->metadata);
     $source = $track->source->name;
-    $email = (object)['subject' => '', 'body' => '', 'to' => ''];
+    $email = (object)['subject' => '', 'body' => ''];
 
     //replace links
     $header = "[via $source: $track->query_string] $metadata->title";
@@ -206,7 +208,6 @@ class RedditController extends Controller
 
     $email->body = "<b>$header</b>" . "<p>$formattedBody</p>" . "<br /><br />$footer";
 
-    $email->to = $track->user->email;
     $email->subject = $metadata->title;
 
     return $email;
@@ -214,10 +215,9 @@ class RedditController extends Controller
 
   public function composeAccumulatedEmail(Track $track, $accumulation): object
   {
-    $email = (object)['subject' => '', 'body' => '', 'to' => ''];
+    $email = (object)['subject' => '', 'body' => ''];
     $source = $track->source->name;
     $email->subject = "[$source: $track->query_string]";
-    $email->to = $track->user->email;
     $body = "";
 
 
@@ -233,4 +233,35 @@ class RedditController extends Controller
 
     return $email;
   }
+
+  public function composeRedditPost(Track $track, Content $content, $postType='self'): array
+  {
+
+    
+    $metadata = $content->metadata;
+    $redditPost = [
+      'title' => $metadata['title'],
+      'text' => $content->body, 
+      'sr'=>$track->destination->credential,
+      'kind'=>$postType
+    ];
+
+    return $redditPost;
+  }
+
+  public function submitRedditPost($redditPost)
+  {
+    $accessToken = $this->getAccessToken();
+    // $rawResponse = Http::withToken($accessToken)->post("https://reddit.com/api/v1/submit", $redditPost);
+    // Token <ACCESS_TOKEN>" "-X" "POST" "-A" "script" "--user" "<CLIENT_ID>:<CLIENT_SECRET>" "-d" "title=Test%20Post%20Title&kind=self&sr=<USERNAME>&resubmit=true&send_replies=true&text=Test%20Post" "https://www.oauth.reddit.com/api/v1/submit" 
+    // curl "-H" "Authorization: Token <ACCESS_TOKEN>" "-X" "POST" "-A" "script" "--user" "<CLIENT_ID>:<CLIENT_SECRET>" "-d" "title=Test%20Post%20Title&kind=self&sr=<USERNAME>&resubmit=true&send_replies=true&text=Test%20Post" "https://www.oauth.reddit.com/api/v1/submit" 
+    
+    Http::withHeaders([
+      'X-First' => 'foo',
+      'X-Second' => 'bar'
+    ]);
+    // $rawResponse = Http::acceptJson()->withToken($accessToken)->post("https://reddit.com/api/v1/submit.json", ['sr' => 'test','text'=>"test",'title'=>'cargo test','kind'=>'self'])->json();
+    // dd($rawResponse);
+  }
+  
 }

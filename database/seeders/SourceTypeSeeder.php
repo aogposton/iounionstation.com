@@ -16,7 +16,7 @@ class SourceTypeSeeder extends Seeder
         'Twitter/Search',
         'Reddit/Subreddit',
         'Reddit/Search',
-        'Reddit/Post'
+        // 'Reddit/Post'
       ];
         foreach($sources as $source){
           \App\Models\SourceType::firstOrCreate([ 'name'=>$source ]);
