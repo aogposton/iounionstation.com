@@ -34,19 +34,16 @@ const querystring = computed(() => {
     switch (selected) {
         case "Twitter/User":
             return "@user";
-            break;
 
         case "Twitter/Search":
             return "some search query";
-            break;
 
         case "Reddit/Subreddit":
             return "r/~";
-            break;
 
         case "Reddit/Search":
             return "some search query";
-            break;
+
         default:
             return selected;
     }

@@ -83,8 +83,6 @@ function addNewTrack() {
     delete newTrack.process_day;
     delete newTrack.process_time;
 
-    console.log(newTrack);
-
     axios.post(`/tracks`, newTrack).then((response) => {
         cancelNewTrack();
         router.reload({

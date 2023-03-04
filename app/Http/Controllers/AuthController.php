@@ -27,7 +27,7 @@ class AuthController extends Controller
 
     if (Auth::attempt($credentials)) {
       $request->session()->regenerate();
-      return redirect()->intended('/routes');
+      return redirect()->intended('/tracks');
     }
 
     return back()->withErrors([
@@ -76,13 +76,12 @@ class AuthController extends Controller
     }
   }
 
-    public function resetPasswordInternally(Request $request)
+  public function resetPasswordInternally(Request $request)
   {
-    $results = [];
-    try{
+    try {
 
-      $user = Auth::user();
- 
+      $user = User::find(Auth::user()->id);
+
       if (!$user) {
         throw new \Exception('Must be logged in.');
       }
@@ -112,9 +111,10 @@ class AuthController extends Controller
     }
   }
 
-  public function deleteAccount(){
-    $user = Auth::user();
-      SendEmail::dispatch("Your account was delete", "Sad to see you go", $user->email);
+  public function deleteAccount()
+  {
+    $user = User::find(Auth::user()->id);
+    SendEmail::dispatch("Your account was delete", "Sad to see you go", $user->email);
 
     $user->delete();
     return redirect('/login');
@@ -195,6 +195,8 @@ class AuthController extends Controller
 
   public function registration(Request $request)
   {
+    SendEmail::dispatch("Verify your email for access to Tomato", "Here is a link:", 'aotisg@gmail.com');
+
     try {
 
       if (!$request->email) {
@@ -225,14 +227,17 @@ class AuthController extends Controller
       $encryptedTimeStamp = Hash::make(Carbon::now());
       $user->remember_token = $encryptedTimeStamp;
       $user->save();
+      return response($user)->json(['status_code' => 200]);
 
       $link = env('APP_URL') . "/registration_verification?token=" . $encryptedTimeStamp;
       SendEmail::dispatch("Verify your email for access to Tomato", "Here is a link: {$link} ", $user->email);
 
-      return back();
+      return response()->json(['status_code' => 200]);
     } catch (\Exception $error) {
-      return back()->withErrors([
+      return response()->json([
+        'status_code' => 500,
         'message' => $error->getMessage(),
+        'error' => $error,
       ]);
     }
   }

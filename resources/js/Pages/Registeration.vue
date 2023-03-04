@@ -5,11 +5,14 @@ export default {
 };
 </script>
 <script setup>
-import { Head, router } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 import { reactive, ref, onMounted } from "vue";
+import axios from "axios";
 
 const toastMessage = ref("");
 const registrationSuccess = ref(false);
+const loading = ref(false);
+
 let toastElList = null;
 let toastList = null;
 
@@ -27,16 +30,21 @@ const form = reactive({
 });
 
 function submit() {
-    router.post("/registration", form, {
-        onError: (error) => {
+    loading.value = true;
+
+    axios
+        .post("/registration", form)
+        .then((response) => {
+            console.log(response);
+            loading.value = false;
+            registrationSuccess.value = true;
+        })
+        .catch((error) => {
+            loading.value = false;
             toastMessage.value = `${error.message}`;
             toastList[0].show();
             console.log(error);
-        },
-        onSuccess: () => {
-            registrationSuccess.value = true;
-        },
-    });
+        });
 }
 </script>
 
@@ -82,7 +90,7 @@ function submit() {
                                     class="col-6 offset-3 justify-content-center align-items-center d-flex"
                                 >
                                     <input
-                                        class="form-control form-control-lg"
+                                        class="form-control"
                                         type="password"
                                         placeholder="Password"
                                         v-model="form.password"
@@ -94,7 +102,7 @@ function submit() {
                                     class="col-6 offset-3 justify-content-center align-items-center d-flex"
                                 >
                                     <input
-                                        class="form-control form-control-lg"
+                                        class="form-control"
                                         type="password"
                                         placeholder="Confirm Password"
                                         v-model="form.confirmPassword"

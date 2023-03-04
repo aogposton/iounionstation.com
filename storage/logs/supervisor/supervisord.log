@@ -1,0 +1,66 @@
+2023-02-28 00:48:14,728 INFO Set uid to user 0 succeeded
+2023-02-28 00:48:14,732 INFO supervisord started with pid 1
+2023-02-28 00:48:15,737 INFO spawned: 'cron' with pid 16
+2023-02-28 00:48:15,744 INFO spawned: 'laravel-worker_00' with pid 17
+2023-02-28 00:48:15,747 INFO spawned: 'php' with pid 18
+2023-02-28 00:48:16,750 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-02-28 00:48:16,750 INFO success: laravel-worker_00 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-02-28 00:48:16,751 INFO success: php entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-02-28 00:48:30,930 INFO reaped unknown pid 37 (terminated by SIGPIPE)
+2023-02-28 01:51:19,114 WARN received SIGTERM indicating exit request
+2023-02-28 01:51:19,114 INFO waiting for cron, laravel-worker_00, php to die
+2023-02-28 01:51:19,118 INFO stopped: php (terminated by SIGTERM)
+2023-02-28 01:51:19,167 INFO stopped: laravel-worker_00 (exit status 0)
+2023-02-28 01:51:19,168 INFO stopped: cron (terminated by SIGTERM)
+2023-02-28 01:52:05,511 INFO Set uid to user 0 succeeded
+2023-02-28 01:52:05,514 INFO supervisord started with pid 1
+2023-02-28 01:52:06,519 INFO spawned: 'cron' with pid 16
+2023-02-28 01:52:06,522 INFO spawned: 'laravel-worker_00' with pid 17
+2023-02-28 01:52:06,524 INFO spawned: 'php' with pid 18
+2023-02-28 01:52:07,526 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-02-28 01:52:07,527 INFO success: laravel-worker_00 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-02-28 01:52:07,527 INFO success: php entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-02-28 01:54:31,519 WARN received SIGTERM indicating exit request
+2023-02-28 01:54:31,519 INFO waiting for cron, laravel-worker_00, php to die
+2023-02-28 01:54:31,522 INFO stopped: php (terminated by SIGTERM)
+2023-02-28 01:54:31,566 INFO stopped: laravel-worker_00 (exit status 0)
+2023-02-28 01:54:31,567 INFO stopped: cron (terminated by SIGTERM)
+2023-02-28 01:56:05,920 INFO Set uid to user 0 succeeded
+2023-02-28 01:56:05,923 INFO supervisord started with pid 1
+2023-02-28 01:56:06,927 INFO spawned: 'cron' with pid 16
+2023-02-28 01:56:06,931 INFO spawned: 'laravel-worker_00' with pid 17
+2023-02-28 01:56:06,933 INFO spawned: 'php' with pid 18
+2023-02-28 01:56:07,936 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-02-28 01:56:07,936 INFO success: laravel-worker_00 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-02-28 01:56:07,937 INFO success: php entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-02-28 02:00:40,553 WARN received SIGTERM indicating exit request
+2023-02-28 02:00:40,554 INFO waiting for cron, laravel-worker_00, php to die
+2023-02-28 02:00:40,556 INFO stopped: php (terminated by SIGTERM)
+2023-02-28 02:00:40,602 INFO stopped: laravel-worker_00 (exit status 0)
+2023-02-28 02:00:40,603 INFO stopped: cron (terminated by SIGTERM)
+2023-02-28 02:05:04,378 INFO Set uid to user 0 succeeded
+2023-02-28 02:05:04,380 INFO supervisord started with pid 1
+2023-02-28 02:05:05,385 INFO spawned: 'cron' with pid 16
+2023-02-28 02:05:05,388 INFO spawned: 'laravel-worker_00' with pid 17
+2023-02-28 02:05:05,390 INFO spawned: 'php' with pid 18
+2023-02-28 02:05:06,392 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-02-28 02:05:06,392 INFO success: laravel-worker_00 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-02-28 02:05:06,393 INFO success: php entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-02-28 02:07:46,019 WARN received SIGTERM indicating exit request
+2023-02-28 02:07:46,020 INFO waiting for cron, laravel-worker_00, php to die
+2023-02-28 02:07:46,022 INFO stopped: php (terminated by SIGTERM)
+2023-02-28 02:07:46,071 INFO stopped: laravel-worker_00 (exit status 0)
+2023-02-28 02:07:46,072 INFO stopped: cron (terminated by SIGTERM)
+2023-02-28 02:10:24,862 INFO Set uid to user 0 succeeded
+2023-02-28 02:10:24,864 INFO supervisord started with pid 1
+2023-02-28 02:10:25,869 INFO spawned: 'cron' with pid 16
+2023-02-28 02:10:25,872 INFO spawned: 'laravel-worker_00' with pid 17
+2023-02-28 02:10:25,875 INFO spawned: 'php' with pid 18
+2023-02-28 02:10:26,878 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-02-28 02:10:26,878 INFO success: laravel-worker_00 entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-02-28 02:10:26,879 INFO success: php entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-02-28 02:14:07,821 WARN received SIGTERM indicating exit request
+2023-02-28 02:14:07,822 INFO waiting for cron, laravel-worker_00, php to die
+2023-02-28 02:14:07,824 INFO stopped: php (terminated by SIGTERM)
+2023-02-28 02:14:07,873 INFO stopped: laravel-worker_00 (exit status 0)
+2023-02-28 02:14:07,874 INFO stopped: cron (terminated by SIGTERM)
